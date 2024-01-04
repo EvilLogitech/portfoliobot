@@ -1,13 +1,17 @@
 from tinydb import TinyDB, Query
+from pathlib import Path
 
 
-db = TinyDB('templates.json')
+DB_DIR = Path(__file__).resolve().parent.parent
+db_name = DB_DIR / 'file_ids.json'
+db = TinyDB(db_name)
 Files = Query()
 
 
 def get_file_id(filename, db_name=db):
     file_id = db_name.search(Files.filename == filename)
-    return file_id
+    if file_id:
+        return file_id[-1].get('file_id')
 
 
 def add_file_id(filename, file_id, db_name=db):
