@@ -2,7 +2,7 @@
 from telebot import types, TeleBot
 import os
 from dotenv import load_dotenv
-from db_utils import get_file_id, add_file_id
+from db_utils import get_file_id, add_file_id, add_user
 import utils
 import keyboards
 import time
@@ -115,6 +115,7 @@ def send_pictures(filenames, chat_id):
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     chat_id = message.chat.id
+    add_user(message.from_user)
     username = message.from_user.first_name
     greetings_text = text_messages.get('greetings').format(username)
     greetings_img = utils.get_pictures_filenames('')[0]
@@ -224,6 +225,7 @@ def process_messages(message):
 
 
 def start():
+    # bot.delete_webhook()
     bot.infinity_polling()
 
 
